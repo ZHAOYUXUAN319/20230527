@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head
+	th:replace="common/head :: head_fragment(title = '物件情報一覧', scripts = ~{::script}, links = ~{::link})"></head>
+<body>
+	<div class="container">
+		<h1>物件情報一覧</h1>
+		<div class="float-end">
+			<a th:href="@{/user/BukenAdd}" class="btn btn-primary">新規登録はこちら</a>
+		</div>
+
+		<form th:action="${'/user/Buken/' + searchId}" method="get">
+			<div class="form-group">
+				<label for="searchId">搜索ID:</label> <input type="text" id="searchId"
+					name="searchId" class="form-control" th:value="${searchId}" />
+
+			</div>
+			<button type="submit" class="btn btn-primary">搜索</button>
+		</form>
+
+
+
+
+		<div th:if="${searchResults}">
+			<h2>检索结果</h2>
+			<table class="table table-striped">
+				<thead>
+					<tr>
+						<th>ID</th>
+						<th>名前</th>
+						<th>住所</th>
+						<th>物件タイプ</th>
+						<th>物件エリア</th>
+						<th>価格</th>
+						<th>所属会社ID</th>
+						<th>ステータス</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="result : ${searchResults}">
+						<td th:text="${result.propertyId}"></td>
+						<td th:text="${result.propertyName}"></td>
+						<td th:text="${result.address}"></td>
+						<td th:text="${result.propertyType}"></td>
+						<td th:text="${result.propertyArea}"></td>
+						<td th:text="${result.price}"></td>
+						<td th:text="${result.syozokuCompanyId}"></td>
+						<td th:text="${result.status}"></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+
+
+
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th>ID</th>
+					<th>名字</th>
+					<th>地址</th>
+					<th>物件类型</th>
+					<th>物件面积</th>
+					<th>价格</th>
+					<th>所属公司ID</th>
+					<th>状态</th>
+					<th>操作</th>
+					<!-- 添加一个新列用于删除按钮 -->
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="buken : ${bukenList}" class="align-middle">
+					<td th:text="${buken.propertyId}"></td>
+					<td th:text="${buken.propertyName}"></td>
+					<td th:text="${buken.address}"></td>
+					<td th:text="${buken.propertyType}"></td>
+					<td th:text="${buken.propertyArea}"></td>
+					<td th:text="${buken.price}"></td>
+					<td th:text="${buken.syozokuCompanyId}"></td>
+					<td th:text="${buken.status}"></td>
+					<td>
+						<form
+							th:action="@{/user/Buken/delete/{id}(id=${buken.propertyId})}"
+							method="post">
+							<button type="submit" class="btn btn-danger">删除</button>
+						</form>
+					</td>
+					<td><a th:href="@{/user/BukenEdit/{propertyId}(propertyId=${buken.propertyId})}" class="btn btn-primary">编辑</a></td>
+
+			</tbody>
+		</table>
+
+
+		<form action="/submit" method="post">
+			<input type="text" name="uid"> <input type="submit"
+				value="Submit">
+		</form>
+
+		<p>
+			UID: <span th:text="${uidValue}"></span>
+		</p>
+</body>
+</html>
